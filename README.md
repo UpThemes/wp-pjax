@@ -10,3 +10,10 @@ Read more about [pjax](https://github.com/defunkt/jquery-pjax), right now the pl
 #### Coming up
 
 Easy way to filter the element pjax works on and filter the content that wordpress serves up.
+
+
+---
+
+#### Contributing
+
+If you'd like to contribute, you're in luck because I'm accepting pull requests. I'll review and then tie them in if they make sense. Thanks!
