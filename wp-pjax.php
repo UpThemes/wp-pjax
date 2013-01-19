@@ -14,7 +14,11 @@ class WP_pjax {
    *  @var
    */
   private $print_scripts = false;
-  private $pjax_delim = "@@@PJAXBREAK@@@";
+
+  /** Pjax delimeter
+   *  @var
+   */
+  public $pjax_delim = "@@@PJAXBREAK@@@";
 
   /** Hook WordPress
   * @return void
@@ -51,6 +55,9 @@ class WP_pjax {
       return (isset($_SERVER['HTTP_X_PJAX']) && $_SERVER['HTTP_X_PJAX'] == 'true');
   }
 
+  /**
+   * Test header for pjax request, start trim page to return only content.
+   */
   public function test_header() {
 
     if($this->is_pjax_request()) {
@@ -58,6 +65,9 @@ class WP_pjax {
     }
   }
 
+  /**
+   * Test footer for pjax request, insert delimeter for parsing out content.
+   */
   public function test_footer() {
 
     if($this->is_pjax_request()) {
@@ -65,6 +75,10 @@ class WP_pjax {
     }
   }
 
+  /**
+   * Parse out content for pjax requests.
+   * @return string
+   */
   public function trim_page($buffer){
 
     $buffer = preg_replace('/<(body|BODY)(.+)>/', "$0$this->pjax_delim", $buffer);
@@ -76,4 +90,4 @@ class WP_pjax {
 
 }
 
-new WP_pjax();
+$wp_pjax = new WP_pjax();
