@@ -9,34 +9,32 @@
 
   var matchesTypes = function(requestHref) {
 
-    $.each(types, function(i, v) {
-//      var regex = "\\" + v + "$"; // escape the period & add string end modifier
-      var regex = ".jpg";
-      var matches = toString(requestHref).match(regex);
+    var _return = false;
 
-      console.log("matches: " + matches + " -  requestHref: " + requestHref + " - regex: " + regex );
+    $.each(types, function(i, v) {
+
+      var regex = new RegExp("\\" + v + "$");
+      var matches = requestHref.match(regex);
 
       if( matches )
-        return true;
+        _return = true;
       
     });    
 
-    return false;
+    return _return;
   };
 
 
   $(document).on('click', 'a', function(e) {
 
-    e.preventDefault();
     var req = matchesTypes($(e.srcElement).attr('href'));
 
-    // Exit if it matches something in our filter
     if(req){
-      return false;
+      // Business as usual
     } else {
-//      if($.support.pjax) {
-//        $.pjax.click(e, { container: $('body') });
-//      }
+      if($.support.pjax) {
+        $.pjax.click(e, { container: $('body') });
+      }
     }
     
   });
