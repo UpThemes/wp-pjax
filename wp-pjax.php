@@ -10,29 +10,54 @@ Author URI: http://matthewsimo.com/
 
 class WP_pjax {
 
-  /** Print Scripts?
-   *  @var
+  /**
+   * Print Scripts?
+   * @var bool
    */
   private $print_scripts = false;
 
   /** Pjax delimeter
    *  @var
    */
-  public $pjax_delim = "@@@PJAXBREAK@@@";
+  public $delim = "@@@PJAXBREAK@@@";
 
-  /** Hook WordPress
-  * @return void
-  */
+  /**
+   * Pjax Target
+   *
+   * Target for click events to watch for pjax triggering.
+   * @var string
+   */
+  public $pjax_target = 'a';
+
+  /**
+   * Pjax Container Element
+   *
+   * Something that works nicely between a $(), passed to pjax js to tell it which container to put the data recieved from the server.
+   * @var string
+   */
+  public $container_el = 'body';
+
+  /**
+   * Pjax filter types
+   *
+   * Array of strings that relates to file type endings pjax will ignore, passed into site-pjax
+   * @var array
+   */
+  public $filters = array(".jpg", ".png", ".pdf");
+
+  /**
+   * Hook WordPress
+   * @return void
+   */
   public function __construct(){
-
     add_action('init', array($this, 'register_scripts'), 0);
     add_action('wp_footer', array($this, 'print_scripts'), 20);
-
-    add_action('get_header', array($this, 'test_header'), 0);
-    add_action('get_footer', array($this, 'test_footer'), 0);
+    add_action('get_header', array($this, 'test_page'), 0);
+    add_action('wp_footer', array($this, 'test_footer'), 0);
   } 
 
-  /* Register scripts for our plugin
+  /**
+   * Register scripts for our plugin
    * @return void
    */
   public function register_scripts(){
@@ -40,10 +65,17 @@ class WP_pjax {
     wp_register_script('site-pjax', plugins_url('assets/js/site-pjax.js', __FILE__), array('jquery-pjax'), '0.0.1', true);
   }
 
-  /* Print out our scripts
+  /**
+   * Pass Container element to site-pjax & Print out our scripts
    * @return void
    */
   public function print_scripts(){
+    $data = array(
+      'pjaxContainer'   =>  $this->container_el,
+      'pjaxFilters'     =>  $this->filters,
+      'pjaxTarget'      =>  $this->pjax_target
+    );
+    wp_localize_script('site-pjax', 'pjaxData', $data);
     wp_print_scripts('site-pjax'); 
   }
 
@@ -52,17 +84,25 @@ class WP_pjax {
    * @return bool
    */
   public function is_pjax_request() {
-      return (isset($_SERVER['HTTP_X_PJAX']) && $_SERVER['HTTP_X_PJAX'] == 'true');
+    return (isset($_SERVER['HTTP_X_PJAX']) && $_SERVER['HTTP_X_PJAX'] == 'true');
   }
 
+  public function output_delim(){
+    if($this->is_pjax_request() && $this->container_el != 'body')
+      echo $this->delim;
+  }
+
+
   /**
-   * Test header for pjax request, start trim page to return only content.
+   * Test page for pjax request, start trim page to return only content.
+   * @return void
    */
-  public function test_header() {
+  public function test_page() {
 
     if($this->is_pjax_request()) {
       ob_start(array($this, 'trim_page'));
     }
+
   }
 
   /**
@@ -70,22 +110,33 @@ class WP_pjax {
    */
   public function test_footer() {
 
-    if($this->is_pjax_request()) {
-      echo $this->pjax_delim;
-    }
+    if($this->container_el == 'body' && $this->is_pjax_request())
+      echo $this->delim;
+
   }
 
   /**
    * Parse out content for pjax requests.
+   * @param $buffer - string
    * @return string
    */
   public function trim_page($buffer){
 
-    $buffer = preg_replace('/<(body|BODY)(.+)>/', "$0$this->pjax_delim", $buffer);
-    $buffer = explode($this->pjax_delim, $buffer, -1);
 
-  //  return var_dump($page);
-    return $buffer[1];
+    // Get the body attributes for the requested page.
+    preg_match('/<body([^>]*)?>/ism', $buffer, $attrMatches);
+    $bodyAttr = $attrMatches[1];
+
+    // Add the 'first' delimeter just after the body tag for default settings
+    if($this->container_el == 'body'){
+      $buffer = preg_replace('/<body([^>]*)?>/ism', "$0$this->delim", $buffer);
+    }
+
+    // Split page by delimeter, return junk in the middle
+    $buffer = explode($this->delim, $buffer);
+    return  $buffer[1] . "\n\n<script type='text/javascript'>var bodyAttr = '$bodyAttr';</script>";
+
+
   }
 
 }

@@ -1,17 +1,22 @@
 (function($){
 
+  // We have accees to the variable 'pjaxData' thanks to wp_localize_script();
+  // Uncomment for variable data
+    console.log(pjaxData);
+    console.log(typeof pjaxData.pjaxContainer + " : " + pjaxData.pjaxContainer);
+    console.log(typeof pjaxData.pjaxFilters + " : " + pjaxData.pjaxFilters);
+    console.log(typeof pjaxData.pjaxTarget + " : " + pjaxData.pjaxTarget);
+
   // Uncomment for pjax event testing
-  $(document).on('pjax:start', function() { console.log("starting pjax") });
-  $(document).on('pjax:end', function() {console.log("ending pjax") });
+    $(document).on('pjax:start', function() { console.log("starting pjax") });
+    $(document).on('pjax:end', function() {console.log("ending pjax") });
 
-  // requests ending with these strings will NOT trigger a pjax request.
-  var types = [".jpg", ".png", ".pdf"];
-
+  // requests ending with these strings will NOT trigger a pjax request. 
   var matchesTypes = function(requestHref) {
 
     var _return = false;
 
-    $.each(types, function(i, v) {
+    $.each(pjaxData.pjaxFilters, function(i, v) {
 
       var regex = new RegExp("\\" + v + "$");
       var matches = requestHref.match(regex);
@@ -25,15 +30,13 @@
   };
 
 
-  $(document).on('click', 'a', function(e) {
+  $(document).on('click', pjaxData.pjaxTarget, function(e) {
 
-    var req = matchesTypes($(e.srcElement).attr('href'));
-
-    if(req){
+    if(matchesTypes($(e.srcElement).attr('href'))){
       // Business as usual
     } else {
       if($.support.pjax) {
-        $.pjax.click(e, { container: $('body') });
+        $.pjax.click(e, { container: $(pjaxData.pjaxContainer) });
       }
     }
     
