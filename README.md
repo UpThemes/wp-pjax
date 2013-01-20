@@ -7,10 +7,55 @@ Read more about [pjax](https://github.com/defunkt/jquery-pjax), right now the pl
 
 ---
 
+#### Usage
+
+After installing the plugin, all you have to do is activate it run it at default settings. 
+
+By default, we use the body element as the container, you can, however, easily change this (see below). Once the plugin is activated, we self instantiate the `WP_Pjax` class and assign it to `$wp_pjax`.
+
+---
+
+#### Customization
+
+If you'd like to customize the container that pjax will work on you have to do two things:
+- set the `$wp_pjax->container_el` (Default set to `'body'`)
+- Place the delimeters properly within said container.
+
+`$wp_pjax->container_el` is what it sounds like, it's a jquery selector friendly string, anything that would work between `$()` for pjax.
+An example of this is as follows, you'd place this some place like `functions.php`.
+```php
+if(class_exists('WP_pjax')){
+
+  $wp_pjax->container_el = '#main';
+
+}
+```
+
+After customizing the container element, you'll also need to add the delimeter into the right place for pjax responses. I've made a method available to do this: `$wp_pjax->output_delim();`. 
+
+For example, add this into your template files just inside your container element. Once just after it opens, and again just before you close it.
+```php
+<?
+
+if(class_exists('WP_pjax')){
+  global $wp_pjax;
+  $wp_pjax->output_delim();
+}
+
+?>
+```
+
+
+There are some other customizable features as well:
+- `$wp_pjax->filters`: If you want to not use pjax to serve links with a particular href, set this, it's an array that is by default set to `array(".jpg", ".png", ".pdf")`.
+- `$wp_pjax->delim`: In an effort to not step on any toes, you have access to the delimeter that we use to chop up the buffer content to server a pjax request, though you shouldn't have to touch this. Default set to `"@@@PJAXBREAK@@@"`.
+- `$wp_pjax->pjax_target`: Set this if you want to tell pjax to watch something else other than the default `'a'`.
+
+---
+
 #### Coming up
 
-Easy way to filter the element pjax works on and filter the content that wordpress serves up.
-
+- Figure a simple way to pass info you might want to update on the new page that falls outside your container element. (e.g. Page Title, current class for nav)
 
 ---
 
