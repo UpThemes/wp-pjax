@@ -124,8 +124,8 @@ class WP_pjax {
 
 
     // Get the body attributes for the requested page.
-    preg_match('/<body([^>]*)?>/ism', $buffer, $attrMatches);
-    $bodyAttr = $attrMatches[1];
+    preg_match('/<title>.+<\/title>/ism', $buffer, $titleMatch);
+    $pageTitle = $titleMatch[0];
 
     // Add the 'first' delimeter just after the body tag for default settings
     if($this->container_el == 'body'){
@@ -134,7 +134,7 @@ class WP_pjax {
 
     // Split page by delimeter, return junk in the middle
     $buffer = explode($this->delim, $buffer);
-    return  $buffer[1] . "\n\n<script type='text/javascript'>var bodyAttr = '$bodyAttr';</script>";
+    return $pageTitle . $buffer[1];
 
 
   }
