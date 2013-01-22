@@ -55,11 +55,13 @@ There are some other customizable features as well:
 - `$wp_pjax->delim`: In an effort to not step on any toes, you have access to the delimeter that we use to chop up the buffer content to server a pjax request, though you shouldn't have to touch this. Default set to `"@@@PJAXBREAK@@@"`.
 - `$wp_pjax->pjax_target`: Set this if you want to tell pjax to watch something else other than the default `'a'`.
 
+You can always just write your own site-pjax, just deregister and then reregister yours. Take a look at `/assets/js/site-pjax.js` for available `pjaxData`.
+
 ---
 
 #### Coming up
 
-- Figure a simple way to pass info you might want to update on the new page that falls outside your container element. (e.g. Page Title, current class for nav)
+Taking well thought out requests.
 
 ---
 

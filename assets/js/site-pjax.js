@@ -2,31 +2,28 @@
 
   // We have accees to the variable 'pjaxData' thanks to wp_localize_script();
   // Uncomment for variable data
-    console.log(pjaxData);
-    console.log(typeof pjaxData.pjaxContainer + " : " + pjaxData.pjaxContainer);
-    console.log(typeof pjaxData.pjaxFilters + " : " + pjaxData.pjaxFilters);
-    console.log(typeof pjaxData.pjaxTarget + " : " + pjaxData.pjaxTarget);
+  //   console.log(pjaxData);
+  //   console.log(typeof pjaxData.pjaxContainer + " : " + pjaxData.pjaxContainer);
+  //   console.log(typeof pjaxData.pjaxFilters + " : " + pjaxData.pjaxFilters);
+  //   console.log(typeof pjaxData.pjaxTarget + " : " + pjaxData.pjaxTarget);
 
   // Uncomment for pjax event testing
-    $(document).on('pjax:start', function() { console.log("starting pjax") });
-    $(document).on('pjax:end', function() {console.log("ending pjax") });
+  //   $(document).on('pjax:start', function() { console.log("starting pjax") });
+  //   $(document).on('pjax:end', function() {console.log("ending pjax") });
+
 
   // requests ending with these strings will NOT trigger a pjax request. 
   var matchesTypes = function(requestHref) {
 
     var _return = false;
-
     $.each(pjaxData.pjaxFilters, function(i, v) {
-
       var regex = new RegExp("\\" + v + "$");
       var matches = requestHref.match(regex);
-
       if( matches )
         _return = true;
-      
     });    
-
     return _return;
+
   };
 
 
