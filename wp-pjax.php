@@ -123,7 +123,7 @@ class WP_pjax {
   public function trim_page($buffer){
 
 
-    // Get the body attributes for the requested page.
+    // Get the title for the requested page.
     preg_match('/<title>.+<\/title>/ism', $buffer, $titleMatch);
     $pageTitle = $titleMatch[0];
 
@@ -132,7 +132,7 @@ class WP_pjax {
       $buffer = preg_replace('/<body([^>]*)?>/ism', "$0$this->delim", $buffer);
     }
 
-    // Split page by delimeter, return junk in the middle
+    // Split page by delimeter, return page title + junk in the middle
     $buffer = explode($this->delim, $buffer);
     return $pageTitle . $buffer[1];
 
