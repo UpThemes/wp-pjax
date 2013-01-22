@@ -13,6 +13,10 @@ After installing the plugin, all you have to do is activate it run it at default
 
 By default, we use the body element as the container, you can, however, easily change this (see below). Once the plugin is activated, we self instantiate the `WP_Pjax` class and assign it to `$wp_pjax`.
 
+A note on body classes:
+
+By default, pjax is set up to replace the body content. This is all well and good but you need to keep in mind that since it's replacing the body content it isn't replacing those useful body classes that some page structure styles depend on. The easiest way around this is to just put a div wrapper as a direct descendant and output the `<?php body_class(); ?>` on that. If you do this, verify your styles that target body classes are generic `.class-name` selectors instead of `body.class-name`.
+
 ---
 
 #### Customization
