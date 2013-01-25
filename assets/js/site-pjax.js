@@ -34,7 +34,7 @@
         $.each(pjaxData.successCB, function(index, value){
           eval(value);
         });
-      } else (typeof pjaxData.successCB === "string"){
+      } else if (typeof pjaxData.successCB === "string"){
         eval(pjaxData.successCB);
       }
 
