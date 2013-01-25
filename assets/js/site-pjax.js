@@ -2,7 +2,7 @@
 
   // We have accees to the variable 'pjaxData' thanks to wp_localize_script();
   // Uncomment for variable data
-  //   console.log(pjaxData);
+     console.log(pjaxData);
   //   console.log(typeof pjaxData.pjaxContainer + " : " + pjaxData.pjaxContainer);
   //   console.log(typeof pjaxData.pjaxFilters + " : " + pjaxData.pjaxFilters);
   //   console.log(typeof pjaxData.pjaxTarget + " : " + pjaxData.pjaxTarget);
@@ -26,6 +26,20 @@
 
   };
 
+  // Add success callbacks
+  if(typeof pjaxData.successCB !== "undefined"){
+    $(document).on('pjax:success', function(e) {
+
+      if(typeof pjaxData.successCB === "object"){
+        $.each(pjaxData.successCB, function(index, value){
+          eval(value);
+        });
+      } else (typeof pjaxData.successCB === "string"){
+        eval(pjaxData.successCB);
+      }
+
+    });
+  }
 
   $(document).on('click', pjaxData.pjaxTarget, function(e) {
 

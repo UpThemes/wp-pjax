@@ -46,6 +46,14 @@ class WP_pjax {
   public $filters = array(".jpg", ".png", ".pdf");
 
   /**
+   * Pjax Success CB
+   *
+   * False or Array of js callback functions
+   * @var array
+   */
+  public $success_cb = false;
+
+  /**
    * Hook WordPress
    * @return void
    */
@@ -75,6 +83,11 @@ class WP_pjax {
       'pjaxFilters'     =>  $this->filters,
       'pjaxTarget'      =>  $this->pjax_target
     );
+
+    if($this->success_cb){
+      $data['successCB'] = $this->success_cb;
+    }
+
     wp_localize_script('site-pjax', 'pjaxData', $data);
     wp_print_scripts('site-pjax'); 
   }
