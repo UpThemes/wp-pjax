@@ -29,6 +29,12 @@ A note on body classes:
 
 By default, pjax is set up to replace the body content. This is all well and good but you need to keep in mind that since it's replacing the body content it isn't replacing those useful body classes that some page structure styles depend on. The easiest way around this is to just put a div wrapper as a direct descendant and output the `<?php body_class(); ?>` on that. If you do this, verify your styles that target body classes are generic `.class-name` selectors instead of `body.class-name`.
 
+A note on pjax perspective:
+
+Keep in mind that in an effort to make page loads of your wordpress install blazing fast, we're only sending the actual content of the container specified. This means that everything that *isn't* actual content we the user loads initially needs to be enough to run your entire site, all your fancy pants .js. 
+
+Which leads me to `$(document).ready()` calls, jQuery runs the code inside once. If you've got a lot of code that needs to be run each time, you're better served putting it in a function that you're calling inside the `$(document).ready()`, which you can then use as a callback function to be run on the `pjax:success` event.
+
 ---
 
 #### Customization
@@ -66,6 +72,7 @@ There are some other customizable features as well:
 - `$wp_pjax->filters`: If you want to not use pjax to serve links with a particular href, set this, it's an array that is by default set to `array(".jpg", ".png", ".pdf")`.
 - `$wp_pjax->delim`: In an effort to not step on any toes, you have access to the delimeter that we use to chop up the buffer content to server a pjax request, though you shouldn't have to touch this. Default set to `"@@@PJAXBREAK@@@"`.
 - `$wp_pjax->pjax_target`: Set this if you want to tell pjax to watch something else other than the default `'a'`.
+- `$wp_pjax->success_cb`: Say you've got some js you need to fire after a successful pjax load. Pass in a callback function, or array of callbacks. (ex: `$wp_pjax->success_cb = array("testCB('testing')", "testCB('testing2')");`)
 
 You can always just write your own site-pjax, just deregister and then reregister yours. Take a look at `/assets/js/site-pjax.js` for available `pjaxData`.
 

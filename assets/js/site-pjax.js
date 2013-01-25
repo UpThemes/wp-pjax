@@ -26,6 +26,20 @@
 
   };
 
+  // Add success callbacks
+  if(typeof pjaxData.successCB !== "undefined"){
+    $(document).on('pjax:success', function(e) {
+
+      if(typeof pjaxData.successCB === "object"){
+        $.each(pjaxData.successCB, function(index, value){
+          eval(value);
+        });
+      } else if (typeof pjaxData.successCB === "string"){
+        eval(pjaxData.successCB);
+      }
+
+    });
+  }
 
   $(document).on('click', pjaxData.pjaxTarget, function(e) {
 
