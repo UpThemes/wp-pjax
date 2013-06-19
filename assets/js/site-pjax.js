@@ -44,11 +44,16 @@
 
   $(document).on('click', pjaxData.pjaxTarget, function(e) {
 
-    if( matchesTypes( $(this).attr('href') ) ){
+    if($(e.srcElement).attr('href'))
+      clickTarget = $(e.srcElement).attr('href');
+    else
+      clickTarget = $(e.srcElement).parents('a').attr('href');
+
+    if(matchesTypes(clickTarget)){
       // Business as usual
     } else {
       if($.support.pjax) {
-        $.pjax.click(e, { container: $(pjaxData.pjaxContainer) });
+        $.pjax({ url: clickTarget, container: $(pjaxData.pjaxContainer) });
       }
     }
     
