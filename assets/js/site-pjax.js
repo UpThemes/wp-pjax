@@ -17,8 +17,9 @@
 
     var _return = false;
     $.each(pjaxData.pjaxFilters, function(i, v) {
-      var regex = new RegExp("\\" + v + "$");
-      var matches = requestHref.match(regex);
+      var regex, matches;
+      regex = new RegExp("\\" + v + "$");
+      matches = requestHref.match(regex);
       if( matches )
         _return = true;
     });    
