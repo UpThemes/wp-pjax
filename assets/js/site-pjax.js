@@ -8,8 +8,10 @@
   //   console.log(typeof pjaxData.pjaxTarget + " : " + pjaxData.pjaxTarget);
 
   // Uncomment for pjax event testing
-  //   $(document).on('pjax:start', function() { console.log("starting pjax") });
-  //   $(document).on('pjax:end', function() {console.log("ending pjax") });
+  // $(document).on('pjax:start', function() { console.log("starting pjax") });
+  // $(document).on('pjax:end', function() {console.log("ending pjax") });
+  // $(document).on('pjax:error', function(e, data, type) { return false; });
+   $(document).on('pjax:timeout', function(e) { return false; });
 
 
   // requests ending with these strings will NOT trigger a pjax request. 
@@ -44,17 +46,16 @@
 
   $(document).on('click', pjaxData.pjaxTarget, function(e) {
 
-    if($(e.srcElement).attr('href'))
-      clickTarget = $(e.srcElement).attr('href');
+    if($(e.target).attr('href'))
+      clickTarget = $(e.target).attr('href');
     else
-      clickTarget = $(e.srcElement).parents('a').attr('href');
+      clickTarget = $(e.target).parents('a').attr('href');
 
-    if(matchesTypes(clickTarget)){
-      // Business as usual
+    if( matchesTypes(clickTarget) ){
+      // Bad match - business as usual
     } else {
-      if($.support.pjax) {
-        $.pjax({ url: clickTarget, container: $(pjaxData.pjaxContainer) });
-      }
+      if($.support.pjax)
+        $.pjax.click(e, { container: pjaxData.pjaxContainer });
     }
     
   });
