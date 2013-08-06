@@ -1,7 +1,7 @@
-wp-pjax
+WP PJAX WordPress Plugin
 =======
 
-Wordpress plugin to add pjax
+This plugin is meant to be used as a starting point to add PJAX support to your WordPress-powered website. Developers should be careful about using this with themes or plugins that may break this functionality with their own custom AJAX calls or conflicting scripts.
 
 Read more about [pjax](https://github.com/defunkt/jquery-pjax), right now the plugin calls pjax on the body element and we have wordpress serve up the page trimmed after the body element up until where the `wp_footer()` call.
 
