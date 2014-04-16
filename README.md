@@ -12,7 +12,7 @@ Read more about [pjax](https://github.com/defunkt/jquery-pjax), right now the pl
 From the command line:
 
 - `cd` to your plugins directory
-- `git clone git@github.com:matthewsimo/wp-pjax.git`
+- `git clone https://github.com/UpThemes/wp-pjax.git`
 - Load your Plugins panel in wp-admin & active your new plugin.
 
 You could alternatively download the .zip that github provides and drop that into your plugins directory. And activate it as normal.
